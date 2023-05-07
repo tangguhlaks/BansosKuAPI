@@ -7,19 +7,19 @@ namespace BansosKuAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class BansosController : ControllerBase
     {
-        private readonly IAuthRepository _repository;
+        private readonly IBansosRepository _repository;
         Random random = new Random();
-        public AuthController(IAuthRepository repository)
+        public BansosController(IBansosRepository repository)
         {
             _repository = repository;
         }
-        [HttpGet("GetUsers")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<User>))]
-        public IActionResult GetUsers()
+        [HttpGet("GetBansos")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Bansos>))]
+        public IActionResult GetBansos()
         {
-            var users = _repository.GetUsers();
+            var users = _repository.GetBansos();
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -27,30 +27,30 @@ namespace BansosKuAPI.Controllers
             return Ok(users);
         }
 
-        [HttpGet("GetUserById/{id}")]
-        [ProducesResponseType(200, Type = typeof(User))]
-        public IActionResult GetUserById(int id)
+        [HttpGet("GetBansosById/{id}")]
+        [ProducesResponseType(200, Type = typeof(Bansos))]
+        public IActionResult GetBansosById(int id)
         {
-            var user = _repository.GetUserById(id);
+            var data = _repository.GetBansosById(id);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            return Ok(user);
+            return Ok(data);
         }
 
-        [HttpDelete("DeletUser/{id}")]
+        [HttpDelete("DeletBansos/{id}")]
         [ProducesResponseType(404)]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult DeleteUser(int id)
+        public IActionResult DeleteBansos(int id)
         {
-            var user = _repository.GetUserById(id);
-            if(user != null)
+            var bansos = _repository.GetBansosById(id);
+            if(bansos != null)
             {
                 try
                 {
-                    _repository.DeleteUser(user);
+                    _repository.DeleteBansos(bansos);
                     return Ok(true);
                 }catch(Exception ex)
                 {
@@ -65,38 +65,18 @@ namespace BansosKuAPI.Controllers
             return Ok(false);
         }
 
-        [HttpGet("Authentication/{nik}/{password}")]
-        [ProducesResponseType(404)]
+        [HttpPost("AddBansos")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult Authentication(string nik,string password)
-        {
-            var cekAuth = _repository.Authentication(nik, password);
-            if (cekAuth)
-            {
-                var user = _repository.GetUsers().Where(x => x.NIK == nik && x.Password == password).First();
-                return Ok(true);
-            }
-            return Ok(false);
-        }
-
-        [HttpPost("AddUser")]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(400)]
-        public IActionResult AddUser([FromBody] UserRegiserVM user) {
-            if(user == null)
+        public IActionResult AddBansos([FromBody] BansosVM bansos) {
+            if(bansos == null)
             {
                 return BadRequest(ModelState);
             }
-            var cekNik = _repository.GetUsers().Where(x=>x.NIK == user.NIK).Count();
-            if(cekNik > 0)
-            {
-                return Ok(-2);
-            }
             try
             {
-                User u = new User(_repository.GetUsers().Count() + 1,user.NIK,user.Fullname,user.Password,user.Role);
-                var id = _repository.AddUser(u);
+                Bansos u = new Bansos(_repository.GetBansos().Count() + 1,bansos.Nama,bansos.Tanggal,bansos.Deskripsi,bansos.Lokasi);
+                var id = _repository.AddBansos(u);
                 return Ok(id);
             }
             catch (Exception ex)
@@ -107,19 +87,19 @@ namespace BansosKuAPI.Controllers
             return Ok(-1);
         }
 
-        [HttpPut("UpdateUser/{id}")]
+        [HttpPut("UpdateBansos/{id}")]
         [ProducesResponseType(404)]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult UpdateUser(int id,[FromBody] User user)
+        public IActionResult UpdateBansos(int id,[FromBody] BansosVM bansos)
         {
-            if (user == null)
+            if (bansos == null)
                 return BadRequest(ModelState);
             if (id == null)
                 return BadRequest(ModelState);
 
-            var cekUser = _repository.GetUserById(id);
-            if(cekUser == null)
+            var cek = _repository.GetBansosById(id);
+            if(cek == null)
                 return NotFound();
             
             if (!ModelState.IsValid)
@@ -127,8 +107,8 @@ namespace BansosKuAPI.Controllers
 
             try
             {
-                user.Id =id;
-                _repository.UpdateUser(user);
+                Bansos data = new Bansos(id, bansos.Nama, bansos.Tanggal, bansos.Deskripsi, bansos.Lokasi);
+                _repository.UpdateBansos(data);
                 return Ok("success");
             }
             catch (Exception ex)

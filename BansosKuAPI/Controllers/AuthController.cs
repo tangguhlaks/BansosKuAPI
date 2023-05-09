@@ -75,9 +75,9 @@ namespace BansosKuAPI.Controllers
             if (cekAuth)
             {
                 var user = _repository.GetUsers().Where(x => x.NIK == nik && x.Password == password).First();
-                return Ok(true);
+                return Ok(user.Id);
             }
-            return Ok(false);
+            return Ok(-1);
         }
 
         [HttpPost("AddUser")]

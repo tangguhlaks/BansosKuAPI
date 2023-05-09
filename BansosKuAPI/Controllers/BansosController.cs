@@ -107,7 +107,7 @@ namespace BansosKuAPI.Controllers
 
             try
             {
-                Bansos data = new Bansos(id, bansos.Nama, bansos.Tanggal, bansos.Deskripsi, bansos.Lokasi);
+                Bansos data = new Bansos(id, bansos.Nama, bansos.Tanggal, bansos.Deskripsi, bansos.Lokasi,bansos.Image);
                 _repository.UpdateBansos(data);
                 return Ok("success");
             }

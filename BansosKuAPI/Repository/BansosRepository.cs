@@ -52,6 +52,7 @@ namespace BansosKuAPI.Repository
                 data.Nama = bansos.Nama;
                 data.Deskripsi = bansos.Deskripsi;
                 data.Lokasi = bansos.Lokasi;
+                data.Image = bansos.Image;
                 return true;
             }catch (Exception ex)
             {

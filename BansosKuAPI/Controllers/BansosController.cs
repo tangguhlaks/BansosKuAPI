@@ -75,7 +75,7 @@ namespace BansosKuAPI.Controllers
             }
             try
             {
-                Bansos u = new Bansos(_repository.GetBansos().Count() + 1,bansos.Nama,bansos.Tanggal,bansos.Deskripsi,bansos.Lokasi);
+                Bansos u = new Bansos(_repository.GetBansos().Count() + 1,bansos.Nama,bansos.Tanggal,bansos.Deskripsi,bansos.Lokasi,bansos.Image);
                 var id = _repository.AddBansos(u);
                 return Ok(id);
             }

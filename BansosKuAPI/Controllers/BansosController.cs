@@ -100,7 +100,8 @@ namespace BansosKuAPI.Controllers
             }
             try
             {
-                TrxBansos u = new TrxBansos(random.Next(1000),bansos.BansosId,bansos.UserId,bansos.Status);
+                TrxBansos u = new TrxBansos(random.Next(1000
+                    ),bansos.BansosId,bansos.UserId,bansos.Status);
                 var id = _repository.AddBansosUser(u);
                 return Ok(id);
             }

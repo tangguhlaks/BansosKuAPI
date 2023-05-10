@@ -62,6 +62,11 @@ namespace BansosKuAPI.Repository
                 data.NIK = user.NIK;
                 data.Role = user.Role;
                 data.Password = user.Password;
+                data.Alamat = user.Alamat;
+                data.FotoKTP = user.FotoKTP;
+                data.Pendapatan = user.Pendapatan;
+                data.FotoRumah = user.FotoRumah;
+              
                 return true;
             }catch (Exception ex)
             {

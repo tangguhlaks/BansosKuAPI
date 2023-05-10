@@ -9,5 +9,7 @@ namespace BansosKuAPI.Interface
         bool UpdateBansos(Bansos bansos);
         bool DeleteBansos(Bansos bansos);
         Bansos GetBansosById(int id);
+        int AddBansosUser(TrxBansos trx);
+        List<TrxBansosVM> GetBansosUser(int id);
     }
 }

@@ -6,6 +6,7 @@ namespace BansosKuAPI.Repository
     public class BansosRepository : IBansosRepository
     {
         List<Bansos> _data = new List<Bansos>();
+        List<TrxBansos> _trxData = new List<TrxBansos>();
 
         public int AddBansos(Bansos bansos)
         {
@@ -63,5 +64,31 @@ namespace BansosKuAPI.Repository
 
         }
 
+        public int AddBansosUser(TrxBansos trx)
+        {
+            try
+            {
+                _trxData.Add(trx);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+                return -1;
+            }
+            return trx.Id;
+        }
+
+        public List<TrxBansosVM> GetBansosUser(int id)
+        {
+            List<TrxBansos> tmpres = _trxData.Where(x => x.UserId == id).ToList();
+            List<TrxBansosVM> res = new List<TrxBansosVM>();
+            foreach (var item in tmpres)
+            {
+                TrxBansosVM tmp = new TrxBansosVM(item.Id,_data.Where(x => x.Id == item.BansosId).First().Nama,item.UserId.ToString(), _data.Where(x => x.Id == item.BansosId).First().Tanggal, item.Status,"-");
+                res.Add(tmp);
+            }
+
+            return res;
+        }
     }
 }

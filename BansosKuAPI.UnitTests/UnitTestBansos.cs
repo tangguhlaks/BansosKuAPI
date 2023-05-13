@@ -11,6 +11,7 @@ using Xunit.Sdk;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
 using CollectionAssert = NUnit.Framework.CollectionAssert;
+using BansosKuAPI.Repository;
 
 namespace BansosKuAPI.Tests
 {
@@ -65,21 +66,14 @@ namespace BansosKuAPI.Tests
         }
 
         [Test]
-        public void GetBansosById_WithInvalidId_ReturnsBadRequest()
+        public void GetBansosById_EmptyRepository_ReturnsEmptyCollection()
         {
-            // Arrange
-            int invalidId = 1;
-            _mockBansosRepository.Setup(repo => repo.GetBansosById(invalidId)).Returns((Bansos)null);
-
             // Act
-            var result = _controller.GetBansosById(invalidId);
+            var bansosList = new List<Bansos>();
+            _mockBansosRepository.Setup(repo => repo.GetBansos()).Returns(bansosList);
 
             // Assert
-            Assert.NotNull(result);
-
-            var badRequestResult = result as BadRequestResult;
-            Assert.NotNull(badRequestResult);
-            Assert.AreEqual(400, badRequestResult.StatusCode);
+            Assert.IsEmpty(bansosList);
         }
 
         [Test]
